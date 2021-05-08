@@ -134,3 +134,7 @@ Route::get('/delete/{id}', function ($id) {
     $post->delete();
 });
 
+Route::get('delete2', function () {
+    Post::destroy(6);
+    Post::where('author','nosa')->delete();
+});
