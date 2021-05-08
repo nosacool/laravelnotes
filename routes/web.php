@@ -140,5 +140,26 @@ Route::get('delete2', function () {
 });
 
 Route::get('/softdeletes', function () {
-    Post::find(5)->delete();
+    Post::find(8)->delete();
 });
+
+//Eloquent read softdelete functionality
+Route::get('/readsoftdelete', function () {
+  /*  $posts = Post::find(5);
+
+     return $posts;
+*/
+$posts = Post::onlyTrashed()->get(); // only deleted items
+
+return $posts;
+});
+//Eloquent read softdelete functionality
+Route::get('/readsoftdelete', function () {
+    /*  $posts = Post::find(5);
+
+       return $posts;
+  */
+  $posts = Post::withTrashed()->get(); // deleted and available items
+
+  return $posts;
+  });
