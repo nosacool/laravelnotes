@@ -138,3 +138,7 @@ Route::get('delete2', function () {
     Post::destroy(6);
     Post::where('author','nosa')->delete();
 });
+
+Route::get('/softdeletes', function () {
+    Post::find(5)->delete();
+});
