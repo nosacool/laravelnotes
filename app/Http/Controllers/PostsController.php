@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Post;
+use App\Models\User;
 
 class PostsController extends Controller
 {
@@ -11,9 +13,13 @@ class PostsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        return "I like my ";
+      $user = User::find($id);
+      $posts = $user->posts;
+
+
+      return view('test',compact('posts'));
         //
     }
 

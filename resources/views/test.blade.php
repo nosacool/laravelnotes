@@ -5,10 +5,10 @@
 
 <h1>Test page</h1>
 
-@if (count($array))
+@if ($posts)
 <ul>
-@foreach ($array as $arr)
-<li>{{$arr}}</li>
+@foreach ($posts as $post)
+<li>{{$post}}</li>
 
 @endforeach
 </ul>

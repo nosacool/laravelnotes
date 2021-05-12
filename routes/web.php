@@ -2,8 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostsController;
+use App\Models\Country;
 use Illuminate\Support\Facades\Facade;
 use App\Models\Post;
+use App\Models\User;
+use App\Models\Role;
+use PHPUnit\Framework\Constraint\Count;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,10 +30,11 @@ Route::get('/admin/posts/home' ,array('as'=> 'admin.home', function(){
 
     return "link is $url";
 }));
+*/
 
-//Route::get('/post/{ids}/{var}',[PostsController::class,'index']);
+Route::get('/test/post/{id}/',[PostsController::class,'index']);
 
-
+/*
 
 Route::resource('posts',"App\Http\Controllers\PostsController");
 
@@ -163,3 +168,65 @@ Route::get('/readsoftdelete', function () {
 
   return $posts;
   });
+
+  Route::get('/restore', function () {
+      Post::onlyTrashed()->restore();
+  });
+
+  //eloquent Force Delete
+
+  Route::get('forcedelete', function () {
+      Post::onlyTrashed()->find(8)->forceDelete();
+  });
+
+  //Eloquent Relationships One -to - One
+
+
+  Route::get('users/{id}/posts', function ($id) {
+
+    return User::find($id)->post->title;
+  });
+
+// inverse relationship
+  Route::get('posts/{id}/user', function ($id) {
+
+    return Post::find($id)->user->name;
+  });
+
+
+  //Eloquent One to Many relationship
+
+  Route::get('users/{id}/allposts', function ($id) {
+
+      $user = User::find($id);
+      $posts = $user->posts;
+      foreach($posts as $post){
+          echo $post;
+      }
+  });
+
+  //Many to Many Relationship
+
+  Route::get('/roles', function () {
+      $role = Role::find(1);
+      echo $role->user;
+  });
+
+  Route::get('/user/role', function () {
+      $user = User::find(1);
+      echo $user->roles;
+  });
+  //Accessing the pivot table
+Route::get('/access/pivot', function () {
+    $user = User::find(1);
+    foreach ($user->roles as $role){
+        echo $role->created_at;
+    }
+});
+
+//Has many through relationship
+
+Route::get('/user/country', function () {
+    $country = Country::find(1);
+    echo $country->posts;
+});
