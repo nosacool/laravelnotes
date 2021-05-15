@@ -58,7 +58,14 @@ class User extends Authenticatable
     public function photos(){
         return $this->morphMany(Photo::class,'imageable');
     }
+
+    // This is called an accessor , it allows you manipulate a value using the camel case
+    // function name style convention.
+    public function getNameAttribute($value){
+        return ucwords($value);
+    }
 }
 
 //To customize table names and columns follow format below
-// return $this->belongsToMany(Role::class,);
+// return $this->belongsToMany(Role::class,'table_name','column');
+
