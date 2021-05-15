@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostRequest;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
+
+
 
 class PostsController extends Controller
 {
@@ -13,13 +16,12 @@ class PostsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index()
     {
-      $user = User::find($id);
-      $posts = $user->posts;
 
+        $posts = Post::all();
 
-      return view('test',compact('posts'));
+      return view('posts.index', compact('posts'));
         //
     }
 
@@ -30,6 +32,7 @@ class PostsController extends Controller
      */
     public function create()
     {
+        return view('posts.create');
         //
     }
 
@@ -39,9 +42,16 @@ class PostsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreatePostRequest $request)
     {
         //
+
+
+        $user = User::find(1);
+        $user->posts()->save(Post::create($request->all()));
+
+
+        return $request->all();
     }
 
     /**
@@ -53,7 +63,9 @@ class PostsController extends Controller
     public function show($id)
     {
         //
-        return "Its working ... yaaay";
+        $post = Post::find($id);
+
+        return view('posts.show',compact('post'));
     }
 
     /**
@@ -65,6 +77,9 @@ class PostsController extends Controller
     public function edit($id)
     {
         //
+        $post = Post::find($id);
+
+        return view('posts.edit',compact('post'));
     }
 
     /**
@@ -77,6 +92,13 @@ class PostsController extends Controller
     public function update(Request $request, $id)
     {
         //
+
+
+        $post = Post::find($id);
+        $post->update($request->all());
+
+        return redirect(route('posts.index'));
+
     }
 
     /**
@@ -88,6 +110,10 @@ class PostsController extends Controller
     public function destroy($id)
     {
         //
+        $post = Post::find($id);
+        $post->delete();
+
+        return redirect(route('posts.index'));
     }
 
     public function contact($id,$name,$pass){

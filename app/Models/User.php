@@ -54,6 +54,10 @@ class User extends Authenticatable
     public function roles(){
         return $this->belongsToMany(Role::class)->withPivot('created_at');
     }
+
+    public function photos(){
+        return $this->morphMany(Photo::class,'imageable');
+    }
 }
 
 //To customize table names and columns follow format below

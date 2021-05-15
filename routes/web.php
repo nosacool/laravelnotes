@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Facade;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Photo;
 use PHPUnit\Framework\Constraint\Count;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,7 +43,7 @@ Route::resource('posts',"App\Http\Controllers\PostsController");
 Route::get('/contact/{id}/{name}/{pass}',"App\Http\Controllers\PostsController@contact");
 
 Route::get('/me/{id}/{yup}',"App\Http\Controllers\PostsController@test");
-*/
+
 
 
 Route::get('/insert', function(){
@@ -70,7 +72,7 @@ Route::get('/delete/{id}', function ($id) {
 
     return "Row $id has been deleted";
 });
-*/
+
 
 Route::get('/read', function () {
     $posts = Post::all();
@@ -153,7 +155,7 @@ Route::get('/readsoftdelete', function () {
   /*  $posts = Post::find(5);
 
      return $posts;
-*/
+
 $posts = Post::onlyTrashed()->get(); // only deleted items
 
 return $posts;
@@ -163,7 +165,7 @@ Route::get('/readsoftdelete', function () {
     /*  $posts = Post::find(5);
 
        return $posts;
-  */
+
   $posts = Post::withTrashed()->get(); // deleted and available items
 
   return $posts;
@@ -226,7 +228,49 @@ Route::get('/access/pivot', function () {
 
 //Has many through relationship
 
-Route::get('/user/country', function () {
-    $country = Country::find(1);
+Route::get('/user/country/{id}', function ($id) {
+    $country = Country::find($id);
     echo $country->posts;
+});
+
+Route::get('users/photos', function () {
+    $user = User::find(1);
+    foreach ($user->photos as $photo) {
+
+        echo $photo;
+        # code...
+    }
+});
+
+Route::get('posts/photos', function () {
+    $post = Post::find(2);
+
+
+    foreach ($post->photos as $photo) {
+        # code...
+        echo $photo;
+    }
+
+});
+
+Route::get('photos/{id}/user', function ($id) {
+    $photo = Photo::find($id);
+
+    return $photo->imageable;
+});
+
+
+/* Crud Application*/
+
+Route::resource('/posts', PostsController::class);
+
+Route::get('/dates', function () {
+    $carbon_date = new Carbon('2021-05-14');
+    echo $carbon_date->addDays(8)->diffForHumans();
+});
+
+Route::get('/getname', function () {
+    $user = User::find(1);
+
+    echo $user->name;
 });

@@ -9,8 +9,12 @@ class Country extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name'
+
+    ];
     public function posts(){
 
-        $this->hasManyThrough(Post::class,User::class);
+        return $this->hasManyThrough(Post::class,User::class);
     }
 }

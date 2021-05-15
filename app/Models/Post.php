@@ -15,7 +15,8 @@ class Post extends Model
     protected $table = 'posts';
     protected $fillable = [
      'title',
-     'body'
+     'body',
+     'author'
 
     ];
 
@@ -23,5 +24,9 @@ class Post extends Model
 
         return $this->belongsTo(User::class);
 
+    }
+
+    public function photos(){
+        return $this->morphMany(Photo::class,'imageable');
     }
 }
